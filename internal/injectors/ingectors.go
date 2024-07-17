@@ -2,12 +2,12 @@ package injectors
 
 import (
 	"github.com/samber/do"
-	"config"
+	"github.com/ddreval/waytogo/internal/config"
 )
 
 var Default *do.Injector
 
 func init() {
    Default = do.New()
-   do.Provide(Default, config.New)
+   do.Provide(Default, config.New())
 }
