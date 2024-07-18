@@ -18,6 +18,9 @@ func New (di *do.Injector) (*Server, error) {
 		return nil, err
 	}	
 	router := gin.New()
+	router.GET("", func(c *gin.Context){
+		c.String(200, "hello")
+	})
 	server := &Server {cfg, router}
 	return server, err
 }
