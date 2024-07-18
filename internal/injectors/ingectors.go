@@ -9,5 +9,5 @@ var Default *do.Injector
 
 func init() {
    Default = do.New()
-   do.Provide(Default, config.New())
+   do.Provide(Default, config.New)
 }
