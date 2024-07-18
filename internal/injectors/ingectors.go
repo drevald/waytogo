@@ -11,5 +11,5 @@ var Default *do.Injector
 func init() {
    Default = do.New()
    do.Provide(Default, config.New)
-   do.Provide(Default, server.New)
+   do.Provide(Default, servers.New)
 }

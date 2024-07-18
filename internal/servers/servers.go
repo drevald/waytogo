@@ -2,7 +2,6 @@ package servers
 
 import (
 	"github.com/ddreval/waytogo/internal/config"
-	"github.com/ddreval/waytogo/internal/injectors"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/do"
 	"fmt"
@@ -14,7 +13,7 @@ type Server struct {
 }
 
 func New (di *do.Injector) (*Server, error) {
-	cfg, err := do.Invoke [*config.Config] (injectors.Default)
+	cfg, err := do.Invoke [*config.Config] (di)
 	if err != nil {
 		return nil, err
 	}	
