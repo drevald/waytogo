@@ -1,10 +1,12 @@
 package servers
 
 import (
+	"fmt"
+
 	"github.com/ddreval/waytogo/internal/config"
+	"github.com/ddreval/waytogo/internal/controllers"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/do"
-	"fmt"
 )
 
 type Server struct {
@@ -17,10 +19,12 @@ func New (di *do.Injector) (*Server, error) {
 	if err != nil {
 		return nil, err
 	}	
-	router := gin.New()
-	router.GET("", func(c *gin.Context){
-		c.String(200, "hello")
-	})
+	router := gin.New()	
+	controller, err := do.Invoke [*controllers.StaticController] (di)
+	if err != nil {
+		return nil, err
+	}
+	controller.Wire(router)
 	server := &Server {cfg, router}
 	return server, err
 }
