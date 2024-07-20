@@ -4,12 +4,11 @@ import (
 	"github.com/caarlos0/env/v11"
 	"github.com/samber/do"	
 	"github.com/joho/godotenv"
-	"github.com/sirupsen/logrus"
 	"os"
 )
 
 type Config struct {
-	Port uint16 `env:"PORT", required`
+	Port uint16 `env:"PORT" default:"8080"`
 	LogLevel string `LOG_LEVEL:"debug" default:"error"`
 }
 
@@ -18,7 +17,6 @@ func New(di *do.Injector) (*Config, error) {
 		_ = godotenv.Load()
 	}
 	var cfg Config
-
 	if err:=env.Parse(&cfg); err!= nil {
 		return nil, err
 	}
