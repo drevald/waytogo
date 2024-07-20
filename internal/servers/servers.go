@@ -2,7 +2,7 @@ package servers
 
 import (
 	"fmt"
-
+	"github.com/sirupsen/logrus"
 	"github.com/ddreval/waytogo/internal/config"
 	"github.com/ddreval/waytogo/internal/controllers"
 	"github.com/gin-gonic/gin"
@@ -14,12 +14,16 @@ type Server struct {
 	router *gin.Engine
 }
 
+var logger *logrus.Logger 
+
 func New (di *do.Injector) (*Server, error) {
-	cfg, err := do.Invoke [*config.Config] (di)
+	cfg, err := do.Invoke [*config.Config] (di)	
+	logger, _ = do.Invoke [*logrus.Logger] (di)
 	if err != nil {
 		return nil, err
 	}	
 	router := gin.New()	
+	router.Use(gin.Recovery())
 	controller, err := do.Invoke [*controllers.StaticController] (di)
 	if err != nil {
 		return nil, err
@@ -31,5 +35,6 @@ func New (di *do.Injector) (*Server, error) {
 	
 func (s *Server) Run() error {
 	addr := fmt.Sprintf(":%d", s.cfg.Port)
-	return s.router.Run(addr);	
+	logger.Info(fmt.Sprintf("running server on port %d", s.cfg.Port))
+	return s.router.Run(addr)
 }
