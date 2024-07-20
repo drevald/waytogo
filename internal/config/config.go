@@ -9,6 +9,7 @@ import (
 
 type Config struct {
 	Port uint16 `env:"PORT" default:"8080"`
+	//Port uint16 `env:"PORT, required"`
 	LogLevel string `LOG_LEVEL:"debug" default:"error"`
 }
 
