@@ -20,12 +20,6 @@ func main() {
 		logger.Info("config not parsed")
 	}
 	logger.Info("config parsed")
-	logger.WithFields(logrus.Fields{
-		"animal": "walrus",
-		"number": 1,
-		"size":   10,
-	  }).Info("A walrus appears")
-
 	// if err != nil {
 	// 	log.Fatalln(err)
 	// }
