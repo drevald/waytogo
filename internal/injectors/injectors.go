@@ -15,5 +15,6 @@ func init() {
    do.Provide(Default, config.New)
    do.Provide(Default, servers.New)
    do.Provide(Default, controllers.NewStatic)
+   do.Provide(Default, controllers.NewTemplate)
    do.Provide(Default, loggers.New)
 }
