@@ -16,6 +16,6 @@ func NewAuth(di *do.Injector) (*Auth, error) {
 }
 
 func (auth *Auth) Authenticate(c *gin.Context) {
-	auth.logger.Debug("Authenticate() called")
+	auth.logger.Info("Authenticate() called")
 	c.Next()
 }

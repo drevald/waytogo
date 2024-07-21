@@ -51,7 +51,11 @@ func (ctl *TemplateController) Wire(router *gin.Engine) {
 }
 
 func (ctl *TemplateController) doTest(c *gin.Context) {
+	ctl.logger.Error("do test")
+	ctl.logger.Warn("do test")
+	ctl.logger.Info("do test")
 	ctl.logger.Debug("do test")
+	fmt.Println("fmt do test")
 	c.HTML(http.StatusOK, "test.html", pongo2.Context{})
 }
 
