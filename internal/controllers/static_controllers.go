@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
 //go:embed static/*
 var staticFS embed.FS
 type StaticController struct {

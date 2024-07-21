@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/ddreval/waytogo/internal/databases"
 	"gitlab.com/go-box/pongo2gin/v5"
 	"github.com/gin-gonic/gin"
 	"github.com/flosch/pongo2/v5"
@@ -15,6 +16,7 @@ var viewsFS embed.FS
 
 type TemplateController struct {
 	templ *pongo2.TemplateSet
+	db *databases.Database
 }
 
 func NewTemplate(di *do.Injector) (*TemplateController, error) {
@@ -22,8 +24,12 @@ func NewTemplate(di *do.Injector) (*TemplateController, error) {
 	if err != nil {
 	  return nil, err
 	}
+	db, err := do.Invoke[* databases.Database](di)
+	if err != nil {
+		return nil, err
+	}
 	templ := pongo2.NewSet("", pongo2.NewFSLoader(templFS))
-	return &TemplateController{templ}, nil
+	return &TemplateController{templ, db}, nil
 }
 
 func (ctl *TemplateController) Wire(router *gin.Engine) {
@@ -34,5 +40,5 @@ func (ctl *TemplateController) Wire(router *gin.Engine) {
 }
 
 func (ctl *TemplateController) doTest (c *gin.Context) {
-	c.HTML(http.StatusOK, "index.html", pongo2.Context{})
+	c.HTML(http.StatusOK, "test.html", pongo2.Context{})
 }

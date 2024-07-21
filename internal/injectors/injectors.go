@@ -3,8 +3,9 @@ package injectors
 import (
 	"github.com/ddreval/waytogo/internal/config"
 	"github.com/ddreval/waytogo/internal/controllers"
-	"github.com/ddreval/waytogo/internal/servers"
+	"github.com/ddreval/waytogo/internal/databases"
 	"github.com/ddreval/waytogo/internal/loggers"
+	"github.com/ddreval/waytogo/internal/servers"
 	"github.com/samber/do"
 )
 
@@ -17,4 +18,5 @@ func init() {
    do.Provide(Default, controllers.NewStatic)
    do.Provide(Default, controllers.NewTemplate)
    do.Provide(Default, loggers.New)
+   do.Provide(Default, databases.New)
 }
