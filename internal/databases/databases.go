@@ -1,18 +1,14 @@
 package databases
 
 import (
-	"github.com/samber/do"
-	"gorm.io/gorm"
-	"gorm.io/driver/postgres"
-	"github.com/ddreval/waytogo/internal/config"
 	"fmt"
+	"github.com/ddreval/waytogo/internal/config"
+	"github.com/samber/do"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-type Database struct {
-	db *gorm.DB
-}
-
-func New(di *do.Injector) (*Database, error) {    
+func New(di *do.Injector) (*gorm.DB, error) {
 	cnf, err := do.Invoke[*config.Config](di)
 	if err != nil {
 		return nil, err
@@ -22,5 +18,9 @@ func New(di *do.Injector) (*Database, error) {
 		fmt.Println(err)
 		return nil, err
 	}
-	return &Database {db}, nil
+	err = db.AutoMigrate(&User{})
+    if err != nil {
+        fmt.Printf("failed to migrate database: %v", err)
+    }
+	return db, nil
 }

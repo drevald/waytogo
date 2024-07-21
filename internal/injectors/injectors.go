@@ -12,11 +12,11 @@ import (
 var Default *do.Injector
 
 func init() {
-   Default = do.New()
-   do.Provide(Default, config.New)
-   do.Provide(Default, servers.New)
-   do.Provide(Default, controllers.NewStatic)
-   do.Provide(Default, controllers.NewTemplate)
-   do.Provide(Default, loggers.New)
-   do.Provide(Default, databases.New)
+	Default = do.New()
+	do.Provide(Default, config.New)
+	do.Provide(Default, servers.New)
+	do.Provide(Default, controllers.NewStatic)
+	do.Provide(Default, controllers.NewTemplate)
+	do.Provide(Default, loggers.New)
+	do.Provide(Default, databases.New)
 }

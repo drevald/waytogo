@@ -11,6 +11,8 @@ require (
 	github.com/samber/do v1.6.0
 	github.com/sirupsen/logrus v1.9.3
 	gitlab.com/go-box/pongo2gin/v5 v5.0.1
+	gorm.io/driver/postgres v1.5.9
+	gorm.io/gorm v1.25.11
 )
 
 require (
@@ -48,6 +50,4 @@ require (
 	golang.org/x/text v0.16.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/driver/postgres v1.5.9 // indirect
-	gorm.io/gorm v1.25.11 // indirect
 )

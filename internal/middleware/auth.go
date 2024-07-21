@@ -5,9 +5,8 @@ import (
 )
 
 type Auth struct {
-
 }
 
-func (ac Auth) Authenticate(c *gin.Context)  {
+func (ac Auth) Authenticate(c *gin.Context) {
 
 }

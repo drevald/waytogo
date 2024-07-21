@@ -2,17 +2,18 @@ package controllers
 
 import (
 	"embed"
-	"github.com/samber/do"	
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/samber/do"
 )
 
 //go:embed static/*
 var staticFS embed.FS
-type StaticController struct {
 
+type StaticController struct {
 }
-func NewStatic (di *do.Injector) (*StaticController, error) {
+
+func NewStatic(di *do.Injector) (*StaticController, error) {
 	return &StaticController{}, nil
 }
 
