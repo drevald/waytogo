@@ -1,6 +1,7 @@
 package injectors
 
 import (
+	"github.com/ddreval/waytogo/internal/middleware"
 	"github.com/ddreval/waytogo/internal/config"
 	"github.com/ddreval/waytogo/internal/controllers"
 	"github.com/ddreval/waytogo/internal/databases"
@@ -19,4 +20,5 @@ func init() {
 	do.Provide(Default, controllers.NewTemplate)
 	do.Provide(Default, loggers.New)
 	do.Provide(Default, databases.New)
+	do.Provide(Default, middleware.NewAuth)
 }

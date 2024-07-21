@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/samber/do"
 	"gitlab.com/go-box/pongo2gin/v5"
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"io/fs"
 	"net/http"
@@ -17,6 +18,7 @@ import (
 var viewsFS embed.FS
 
 type TemplateController struct {
+	logger *logrus.Logger
 	templ *pongo2.TemplateSet
 	db    *gorm.DB
 }
@@ -31,10 +33,16 @@ func NewTemplate(di *do.Injector) (*TemplateController, error) {
 		return nil, err
 	}
 	templ := pongo2.NewSet("", pongo2.NewFSLoader(templFS))
-	return &TemplateController{templ, db}, nil
+	logger, err := do.Invoke[*logrus.Logger](di)
+	if err != nil {
+		return nil, err
+	}
+	return &TemplateController{logger, templ, db}, nil
 }
 
-func (ctl *TemplateController) Wire(router *gin.Engine) {
+func (ctl *TemplateController) Wire(router *gin.Engine) {	
+	fmt.Println("Fmt Wire")
+	ctl.logger.Debug("Wire")
 	router.HTMLRender = pongo2gin.New(pongo2gin.RenderOptions{
 		TemplateSet: ctl.templ,
 	})
@@ -43,10 +51,12 @@ func (ctl *TemplateController) Wire(router *gin.Engine) {
 }
 
 func (ctl *TemplateController) doTest(c *gin.Context) {
+	ctl.logger.Debug("do test")
 	c.HTML(http.StatusOK, "test.html", pongo2.Context{})
 }
 
 func (ctl *TemplateController) doUsers(c *gin.Context) {
+	ctl.logger.Debug("do users")
 	var users []databases.User
     result := ctl.db.Find(&users)
     if result.Error != nil {

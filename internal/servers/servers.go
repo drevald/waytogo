@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/ddreval/waytogo/internal/config"
 	"github.com/ddreval/waytogo/internal/controllers"
+	"github.com/ddreval/waytogo/internal/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/do"
 	"github.com/sirupsen/logrus"
@@ -22,9 +23,9 @@ func New(di *do.Injector) (*Server, error) {
 		return nil, err
 	}
 	router := gin.New()
-	logger.Info("1")
 	router.Use(gin.Recovery())
-	logger.Info("2")
+	auth, _ := do.Invoke[*middleware.Auth](di)
+	router.Use(auth.Authenticate)
 	tcontroller, err := do.Invoke[*controllers.TemplateController](di)
 	if err != nil {
 		logger.Info("Failed to get Template Controller")
