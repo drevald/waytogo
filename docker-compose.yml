@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+  postgres:
+    image: postgres:12-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=waytogo
+    volumes:
+      - data:/var/lib/postgresql/data
+    ports:
+      - 5436:5436
+    command: -p 5436
+volumes:
+  data:
