@@ -78,7 +78,19 @@ func (ctl *TemplateController) doRegister(c *gin.Context) {
 }
 
 func (ctl *TemplateController) postRegister(c *gin.Context) {
-	c.HTML(http.StatusOK, "register.html", pongo2.Context{})
+	ctl.logger.Info("Register form SUBMITTED")
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+	securePassword, _ := HashPassword(password)
+	newUser := databases.User{
+		Username: username,
+		Password: securePassword,
+	}
+	ctl.db.Create(&newUser)
+	if ctl.db.Error != nil {
+		ctl.logger.Error(ctl.db.Error)
+	}
+	c.HTML(http.StatusOK, "login.html", pongo2.Context{})
 }
 
 func (ctl *TemplateController) postLogin(c *gin.Context) {
@@ -86,15 +98,13 @@ func (ctl *TemplateController) postLogin(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 	ctl.logger.Info(fmt.Sprintf("username = %v password = %v", username, password))
-
 	var user databases.User
-
 	result := ctl.db.Where("username = ?", username).First(&user)
 	if result.Error != nil || !CheckPasswordHash(password, user.Password) {
 		c.JSON(401, gin.H{"error": "Invalid username or password"})
 		return
 	}
-
+	c.
 	c.HTML(http.StatusOK, "test.html", pongo2.Context{})
 }
 
