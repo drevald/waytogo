@@ -12,7 +12,23 @@ import (
 	"io/fs"
 	"net/http"
 	"fmt"
+	"golang.org/x/crypto/bcrypt"
 )
+
+// HashPassword hashes a plain-text password
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+// CheckPasswordHash compares a plain-text password with a hashed password
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
+}
+
+
+
 
 //go:embed views/*
 var viewsFS embed.FS
@@ -48,6 +64,38 @@ func (ctl *TemplateController) Wire(router *gin.Engine) {
 	})
 	router.GET("test", ctl.doTest)
 	router.GET("users", ctl.doUsers)
+	router.GET("login", ctl.doLogin)
+	router.POST("login", ctl.postLogin)
+	router.GET("register", ctl.doRegister)
+	router.POST("register", ctl.postRegister)
+}
+
+/////////////////////////////////////////////////////////////////////
+
+
+func (ctl *TemplateController) doRegister(c *gin.Context) {
+	c.HTML(http.StatusOK, "register.html", pongo2.Context{})
+}
+
+func (ctl *TemplateController) postRegister(c *gin.Context) {
+	c.HTML(http.StatusOK, "register.html", pongo2.Context{})
+}
+
+func (ctl *TemplateController) postLogin(c *gin.Context) {
+	ctl.logger.Info("FORM SUBMITTED")
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+	ctl.logger.Info(fmt.Sprintf("username = %v password = %v", username, password))
+
+	var user databases.User
+
+	result := ctl.db.Where("username = ?", username).First(&user)
+	if result.Error != nil || !CheckPasswordHash(password, user.Password) {
+		c.JSON(401, gin.H{"error": "Invalid username or password"})
+		return
+	}
+
+	c.HTML(http.StatusOK, "test.html", pongo2.Context{})
 }
 
 func (ctl *TemplateController) doTest(c *gin.Context) {
@@ -67,4 +115,8 @@ func (ctl *TemplateController) doUsers(c *gin.Context) {
         fmt.Printf("failed to retrieve users: %v", result.Error)
     }
 	c.HTML(http.StatusOK, "users.html", pongo2.Context{"users":users})
+}
+
+func (ctl *TemplateController) doLogin(c *gin.Context) {
+	c.HTML(http.StatusOK, "login.html", pongo2.Context{})
 }
