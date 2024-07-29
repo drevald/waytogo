@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
+	"github.com/gin-contrib/sessions"
 )
 
 // HashPassword hashes a plain-text password
@@ -26,8 +27,6 @@ func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
-
-
 
 
 //go:embed views/*
@@ -101,11 +100,13 @@ func (ctl *TemplateController) postLogin(c *gin.Context) {
 	var user databases.User
 	result := ctl.db.Where("username = ?", username).First(&user)
 	if result.Error != nil || !CheckPasswordHash(password, user.Password) {
-		c.JSON(401, gin.H{"error": "Invalid username or password"})
-		return
+		c.HTML(http.StatusOK, "login.html", pongo2.Context{"error":result.Error})
+	} else {
+		session := sessions.Default(c)
+		session.Set("user", user)
+		session.Save()
+		c.HTML(http.StatusOK, "test.html", pongo2.Context{})
 	}
-	c.
-	c.HTML(http.StatusOK, "test.html", pongo2.Context{})
 }
 
 func (ctl *TemplateController) doTest(c *gin.Context) {
