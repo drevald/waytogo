@@ -23,16 +23,21 @@ func (auth *Auth) Authenticate(c *gin.Context) {
 	auth.logger.Info("Authenticate() called with c.Request.URL.Path = " + c.Request.URL.Path)
 
 	session := sessions.Default(c)
-	user := session.Get("user").(*databases.User)
-
+	fmt.Println("AAA")
+	val := session.Get("user")
 	if c.Request.URL.Path == "/login" || c.Request.URL.Path == "/register" || c.Request.URL.Path == "/favicon.ico" {
+		fmt.Println("BBB")
 		auth.logger.Debug("logger page ok")
 		c.Next()
-	} else if user != nil { 
+	} else if val != nil { 
+		fmt.Println("CCC")
+		user := val.(*databases.User)
 		auth.logger.Info(fmt.Scanf("Logged as %s", user.Username))
 		c.Next()
 	} else {
+		fmt.Println("DDD")
 		auth.logger.Debug("redirecting to logger page")
 		c.Redirect(301, "login")
 	}	
+	fmt.Println("EEE")
 }

@@ -8,6 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/samber/do"
 	"github.com/sirupsen/logrus"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 )
 
 type Server struct {
@@ -17,12 +19,14 @@ type Server struct {
 }
 
 func New(di *do.Injector) (*Server, error) {
-	cfg, err := do.Invoke[*config.Config](di)
+	cfg, _ := do.Invoke[*config.Config](di)
 	logger, err := do.Invoke[*logrus.Logger](di)
 	if err != nil {
 		return nil, err
 	}
 	router := gin.New()
+	store := cookie.NewStore([]byte("secret"))
+  	router.Use(sessions.Sessions("mysession", store))
 	router.Use(gin.Recovery())
 	auth, _ := do.Invoke[*middleware.Auth](di)
 	router.Use(auth.Authenticate)
