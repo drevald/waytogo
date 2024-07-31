@@ -11,6 +11,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/samber/do v1.6.0
 	github.com/sirupsen/logrus v1.9.3
+	github.com/xo/dburl v0.23.2
 	gitlab.com/go-box/pongo2gin/v5 v5.0.1
 	golang.org/x/crypto v0.25.0
 	gorm.io/driver/postgres v1.5.9
@@ -47,7 +48,6 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
-	github.com/xo/dburl v0.23.2 // indirect
 	golang.org/x/arch v0.8.0 // indirect
 	golang.org/x/net v0.27.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect

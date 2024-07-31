@@ -105,7 +105,7 @@ func (ctl *TemplateController) postLogin(c *gin.Context) {
 		session := sessions.Default(c)
 		session.Set("user", user)
 		session.Save()
-		c.HTML(http.StatusOK, "test.html", pongo2.Context{})
+		c.Redirect(http.StatusMovedPermanently, "/test")
 	}
 }
 
