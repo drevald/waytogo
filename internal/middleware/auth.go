@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"github.com/ddreval/waytogo/internal/databases"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -27,7 +26,7 @@ func (auth *Auth) Authenticate(c *gin.Context) {
 		c.Next()
 	} else if val != nil { 
 		user := val.(*databases.User)
-		auth.logger.Info(fmt.Scanf("Logged as %s", user.Username))
+		auth.logger.Infof("Logged as %s", user.Username)
 		c.Next()
 	} else {
 		auth.logger.Error("Unauthorized access - redirecting to login")

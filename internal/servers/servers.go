@@ -19,16 +19,25 @@ type Server struct {
 }
 
 func New(di *do.Injector) (*Server, error) {
-	cfg, _ := do.Invoke[*config.Config](di)
+	cfg, err := do.Invoke[*config.Config](di)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
 	logger, err := do.Invoke[*logrus.Logger](di)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 	router := gin.New()
 	store := cookie.NewStore([]byte("secret"))
   	router.Use(sessions.Sessions("mysession", store))
 	router.Use(gin.Recovery())
-	auth, _ := do.Invoke[*middleware.Auth](di)
+	auth, err := do.Invoke[*middleware.Auth](di)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}	
 	router.Use(auth.Authenticate)
 	tcontroller, err := do.Invoke[*controllers.TemplateController](di)
 	if err != nil {

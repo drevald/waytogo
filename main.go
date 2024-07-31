@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"github.com/ddreval/waytogo/internal/config"
 	"github.com/ddreval/waytogo/internal/injectors"
 	"github.com/ddreval/waytogo/internal/servers"
 	"github.com/samber/do"
@@ -12,17 +10,11 @@ import (
 func main() {
 	logger, err := do.Invoke[*logrus.Logger](injectors.Default)
 	if err != nil {
-		fmt.Println(err)
+		return
 	}
-	cfg, err := do.Invoke[*config.Config](injectors.Default)
-	if err != nil {
-		logger.Info("config not parsed")
-	}
-	logger.Info("config parsed")
-	// if err != nil {
-	// 	log.Fatalln(err)
-	// }
-	fmt.Println(cfg.Port)
 	server, err := do.Invoke[*servers.Server](injectors.Default)
+	if err != nil {
+		logger.Error(err)
+	} 
 	server.Run()
 }
