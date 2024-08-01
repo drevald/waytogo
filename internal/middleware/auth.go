@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/ddreval/waytogo/internal/databases"
 	"github.com/gin-contrib/sessions"
@@ -25,8 +26,10 @@ func (auth *Auth) Authenticate(c *gin.Context) {
 	if c.Request.URL.Path == "/login" || c.Request.URL.Path == "/register" || c.Request.URL.Path == "/favicon.ico" {
 		auth.logger.Warn("logger page ok")
 		c.Next()
-	} else if val != nil { 
-		user := val.(*databases.User)
+	} else if val != nil {
+		var user databases.User 
+		userString := val.(string)
+		json.Unmarshal([]byte(userString), &user)
 		auth.logger.Info(fmt.Scanf("Logged as %s", user.Username))
 		c.Next()
 	} else {

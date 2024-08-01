@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"embed"
 	"github.com/ddreval/waytogo/internal/databases"
 	"github.com/flosch/pongo2/v5"
@@ -103,7 +104,11 @@ func (ctl *TemplateController) postLogin(c *gin.Context) {
 		c.HTML(http.StatusOK, "login.html", pongo2.Context{"error":result.Error})
 	} else {
 		session := sessions.Default(c)
-		session.Set("user", user)
+		data, err := json.Marshal(user)
+		if err != nil {
+			ctl.logger.Error(err)
+		}
+		session.Set("user", data)
 		session.Save()
 		c.Redirect(http.StatusMovedPermanently, "/test")
 	}
