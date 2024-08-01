@@ -1,6 +1,6 @@
 module github.com/ddreval/waytogo
 
-go 1.20
+go 1.22
 
 require (
 	github.com/caarlos0/env/v11 v11.1.0
